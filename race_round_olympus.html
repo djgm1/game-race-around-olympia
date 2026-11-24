@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="MSRAI_Label_dbd012e0-e600-4c3e-83b7-7d3141c15efc_AI_Disclosure" content="Made with AI">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Race Round Olympus</title>
+<style>
+:root{--bg:#0c0a24;--panel:#1d1940;--panel2:#272154;--ink:#f7f0dc;--muted:#b9b0d8;--gold:#f2c14e;--gold2:#b8860b;--fire:#ff6b35;--love:#ff5d8f;--line:#4a3f7a;--serif:Georgia,"Palatino Linotype","Book Antiqua",serif}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--serif);color:var(--ink);min-height:100vh;background:
+ radial-gradient(1px 1px at 10% 20%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 30% 70%,#fff7 50%,transparent 51%),radial-gradient(1.5px 1.5px at 55% 15%,#fffa 50%,transparent 51%),radial-gradient(1px 1px at 75% 45%,#fff8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 90% 80%,#fff9 50%,transparent 51%),radial-gradient(1px 1px at 20% 90%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 65% 85%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 85% 10%,#fff8 50%,transparent 51%),
+ radial-gradient(ellipse at 50% -10%,#4b2f8a 0%,#1c1550 40%,var(--bg) 75%);background-attachment:fixed}
+header{text-align:center;padding:16px 10px 6px;display:flex;align-items:center;justify-content:center;gap:12px}
+header svg{width:clamp(34px,6vw,60px);height:auto}
+h1{margin:0;font-size:clamp(26px,4.6vw,48px);letter-spacing:.12em;text-transform:uppercase;background:linear-gradient(180deg,#fff6cf,#f2c14e 45%,#a86f00);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 3px 0 #3a2400)}
+.sub{color:var(--muted);font-size:14px;text-align:center;font-style:italic}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:10px 16px;background:linear-gradient(180deg,#ffe08a,#f2c14e 50%,#c8901a);color:#2a1b00;font-weight:700;letter-spacing:.03em;box-shadow:0 3px 0 #7a5200,0 6px 14px #0006;transition:transform .1s}
+button:hover:not(:disabled){transform:translateY(-1px)}
+button:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #7a5200}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{background:#ffffff10;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.hidden{display:none !important}
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+/* setup */
+#setup{max-width:940px;margin:6px auto;padding:14px}
+.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 30px #0005}
+.card h2{margin:0 0 8px;font-size:15px;color:var(--gold);text-transform:uppercase;letter-spacing:.15em;text-align:center}
+.pickgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:14px 0}
+.pick{background:#ffffff08;border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center;position:relative;transition:transform .15s,border-color .15s,box-shadow .15s}
+.pick .medal{width:92px;height:92px;cursor:pointer;margin:auto;filter:drop-shadow(0 6px 8px #000a);transition:transform .2s}
+.pick .medal:hover{transform:rotate(-6deg) scale(1.06)}
+.pick.on{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 0 22px #f2c14e55}
+.pick .nm{font-weight:700;font-size:19px;margin-top:6px}
+.pick .wd{color:var(--muted);font-size:13px;font-style:italic}
+.pick .order{position:absolute;top:8px;inset-inline-start:10px;background:var(--gold);color:#2a1b00;border-radius:50%;width:26px;height:26px;display:grid;place-items:center;font-weight:800}
+.pick .row{display:flex;gap:6px;justify-content:center;margin-top:8px}
+.pick .row button{padding:6px 10px;font-size:13px;box-shadow:none}
+.seg{background:#3b3170;color:var(--ink)}
+.seg.sel{background:var(--ink);color:#2a1b00}
+.setupbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;align-items:center}
+/* game */
+#game{display:grid;grid-template-columns:minmax(300px,600px) minmax(280px,370px);gap:18px;justify-content:center;padding:8px 14px 30px}
+@media (max-width:920px){#game{grid-template-columns:1fr}}
+.frame{position:relative;padding:3.2%;border-radius:14px;background:linear-gradient(135deg,#f6e7b8,#c9a45a 40%,#f3dc98 60%,#a8802f);box-shadow:0 18px 50px #000c,inset 0 0 0 2px #fff6}
+.frame>svg.key{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;border-radius:14px}
+.grid{position:relative;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(6,1fr);aspect-ratio:3/4.2;gap:0;background:#2a2148;border:3px solid #6b4d12}
+.cell{position:relative;border:1.5px solid #8a6a2a;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:3% 3% 2%;text-align:center;
+ background:radial-gradient(ellipse at 30% 20%,#ffffff 0%,#f1ece2 40%,#ddd4c4 100%)}
+.cell::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,#b9ad9a33 33%,transparent 36%,transparent 60%,#a8998233 62%,transparent 65%);pointer-events:none}
+.cell .lbl{position:relative;z-index:1;font-size:clamp(8px,1.55vw,13px);font-weight:700;text-transform:uppercase;letter-spacing:.06em;line-height:1.05;color:#3b2a10}
+.cell .ds{position:relative;z-index:1;font-size:clamp(7px,1.25vw,11px);font-style:italic;line-height:1.05;color:#4a3a20}
+.cell .ic{position:absolute;inset:16% 18% 14%;display:flex;align-items:center;justify-content:center;opacity:.9}
+.cell .ic svg{height:100%;width:auto;max-width:100%;filter:drop-shadow(0 2px 2px #0004)}
+.cell.plain .ic{opacity:.22}
+.cell.here{box-shadow:inset 0 0 0 3px #ffd54f,inset 0 0 22px #ffd54f;z-index:1}
+.c-start{background:radial-gradient(ellipse at 50% 30%,#fffbe6,#cde7b0 70%,#9cc77a)}
+.c-crow{background:radial-gradient(ellipse at 50% 20%,#ffe0b2,#ffab61 60%,#d9692a)}
+.c-cupid{background:radial-gradient(ellipse at 50% 30%,#fff0f6,#ffb3cf 65%,#f07aa6)}
+.c-gotohell{background:radial-gradient(ellipse at 50% 30%,#ff8a65,#b71c1c 65%,#4a0000)}
+.c-gotohell .lbl,.c-gotohell .ds,.c-hell .lbl,.c-hell .ds{color:#fff3d6;text-shadow:0 1px 2px #000}
+.c-heph{background:radial-gradient(ellipse at 50% 30%,#eceff1,#b0bec5 60%,#78909c)}
+.c-hell{background:radial-gradient(ellipse at 50% 100%,#ff9100 0%,#d84315 30%,#5d0a0a 70%,#1a0000)}
+.c-makemiss{background:radial-gradient(ellipse at 50% 30%,#e3f2fd,#90caf9 70%,#5c9fd6)}
+.c-apollo{background:radial-gradient(ellipse at 50% 40%,#fffde7,#ffe082 55%,#ffb300)}
+.c-backstart{background:radial-gradient(ellipse at 50% 30%,#fff8e1,#e8cfa0 65%,#c9a46a)}
+.flick{transform-origin:50% 90%;animation:flick .5s ease-in-out infinite alternate}
+@keyframes flick{from{transform:scale(1,1)}to{transform:scale(1.05,.93)}}
+.spin{transform-origin:50% 50%;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.centre{grid-column:2;grid-row:2/6;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:4%;
+ background:radial-gradient(ellipse at 50% 35%,#5b4aa6 0%,#2e2466 55%,#1a1442 100%);border:1.5px solid #8a6a2a;overflow:hidden}
+.centre .temple{position:absolute;inset:auto 0 0 0;width:100%;opacity:.28;pointer-events:none}
+.centre>*:not(.temple){position:relative;z-index:1}
+.turnlbl{font-size:clamp(13px,2.3vw,20px);font-weight:700;color:#fff3cf;text-shadow:0 2px 4px #000}
+.turnmedal{width:38%;max-width:96px;filter:drop-shadow(0 6px 10px #000a)}
+.die{width:clamp(54px,10.5vw,82px);aspect-ratio:1;border-radius:18%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:11%;
+ background:radial-gradient(circle at 30% 25%,#ffffff,#efe9dc 55%,#cfc6b2);box-shadow:inset -4px -5px 8px #0003,inset 3px 3px 6px #fff,0 6px 0 #8a7b5c,0 10px 18px #0008}
+.die span{width:72%;height:72%;margin:auto;border-radius:50%}
+.die span.p{background:radial-gradient(circle at 35% 35%,#ffe9a8,#c8901a 60%,#7a5200);box-shadow:inset 0 1px 2px #0006}
+.die.rolling{animation:roll .35s linear infinite}
+@keyframes roll{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.85)}100%{transform:rotate(360deg) scale(1)}}
+.die.land{animation:land .3s ease-out}
+@keyframes land{0%{transform:scale(1.25)}100%{transform:scale(1)}}
+#rollBtn{font-size:clamp(13px,2.1vw,17px)}
+.hint{color:#d6cff5;font-size:12px;font-style:italic;min-height:1.2em}
+.token{position:absolute;width:10%;aspect-ratio:1;transform:translate(-50%,-50%);transition:left .2s ease,top .2s ease;z-index:5;pointer-events:none}
+.token>svg.medal{width:100%;height:100%;filter:drop-shadow(0 4px 3px #000b)}
+.token.cur{z-index:7}
+.token.cur>svg.medal{animation:bob .9s ease-in-out infinite;filter:drop-shadow(0 0 5px #ffd54f) drop-shadow(0 0 12px #ffd54f)}
+.token.trapped>svg.medal{filter:drop-shadow(0 0 6px #ff3d00) drop-shadow(0 0 12px #d50000)}
+.token .hat{position:absolute;left:50%;top:-46%;width:70%;transform:translateX(-50%) rotate(-12deg)}
+.token .heart{position:absolute;right:-12%;bottom:-10%;width:42%}
+.token.hop{animation:hop .2s ease-out}
+@keyframes hop{50%{margin-top:-2.2%}}
+@keyframes bob{50%{transform:translateY(-9%)}}
+.pop{position:absolute;transform:translate(-50%,-50%);z-index:9;font-weight:800;font-size:clamp(14px,2.6vw,24px);pointer-events:none;text-shadow:0 2px 0 #000,0 0 8px #000;animation:pop 1.4s ease-out forwards;white-space:nowrap}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.6)}15%{opacity:1;transform:translate(-50%,-80%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-260%) scale(1)}}
+.flash{position:fixed;inset:0;pointer-events:none;z-index:40;opacity:0}
+.flash.white{background:#fff;animation:flashw .6s ease-out}
+.flash.red{background:radial-gradient(ellipse at center,transparent 30%,#d50000cc 100%);animation:flashr 1.2s ease-out}
+.flash.pink{background:radial-gradient(ellipse at center,transparent 30%,#ff5d8faa 100%);animation:flashr 1.2s ease-out}
+@keyframes flashw{0%{opacity:.95}20%{opacity:.1}30%{opacity:.7}100%{opacity:0}}
+@keyframes flashr{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+.shake{animation:bshake .5s linear}
+@keyframes bshake{20%{transform:translate(-6px,2px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-4px,3px)}80%{transform:translate(3px,-1px)}}
+.side{display:flex;flex-direction:column;gap:12px}
+.prow{display:grid;grid-template-columns:42px 1fr auto;gap:8px;align-items:center;padding:6px;border-radius:10px}
+.prow.cur{background:#ffffff14;outline:1px solid var(--gold)}
+.prow svg{width:42px;height:42px}
+.prow .n{font-weight:700}
+.prow .s{font-size:12px;color:var(--muted)}
+.laps{display:flex;gap:2px}
+.laps svg{width:18px;height:18px}
+.badge{display:inline-block;font-size:11px;padding:1px 6px;border-radius:8px;margin-inline-start:4px;background:#ffffff1c;font-weight:400}
+.badge.fire{background:#ff6b3540;color:#ffb199}.badge.love{background:#ff5d8f40;color:#ffc1d4}
+#log{max-height:300px;overflow:auto;font-size:13.5px;line-height:1.4;margin:0;padding:0;list-style:none}
+#log li{padding:5px 2px;border-bottom:1px solid #ffffff12}
+#log li:first-child{color:#fff;font-weight:600}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.modal{position:fixed;inset:0;background:#05031acc;display:grid;place-items:center;z-index:50;padding:16px}
+.mbox{background:linear-gradient(180deg,#2d2560,#1b1640);border:2px solid var(--gold);border-radius:16px;padding:18px;max-width:540px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 20px 60px #000;animation:min .25s ease-out}
+@keyframes min{from{transform:scale(.9);opacity:0}}
+.mbox h3{margin:0 0 6px;color:var(--gold);font-size:21px}
+.mbox p{margin:6px 0 12px}
+.mbox .opts{display:flex;flex-direction:column;gap:8px}
+.mbox .opts button{display:flex;align-items:center;gap:10px;justify-content:center}
+.mbox .opts svg{width:30px;height:30px}
+.mhead{display:flex;align-items:center;gap:12px}
+.mhead svg{width:58px;height:58px;flex:none}
+.rules ul{padding-inline-start:0;margin:6px 0;list-style:none}
+.rules li{margin:8px 0;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center}
+.rules li svg{width:34px;height:34px}
+.win{text-align:center}
+.win svg.medal{width:150px;height:150px;animation:bob 1s ease-in-out infinite}
+.confetti{position:fixed;top:-20px;width:12px;height:12px;z-index:60;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+</style>
+</head>
+<body>
+<svg class="defs" aria-hidden="true"><defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2b8"/><stop offset=".35" stop-color="#e8b53c"/><stop offset=".6" stop-color="#fbe08a"/><stop offset="1" stop-color="#8a5a00"/></linearGradient>
+ <radialGradient id="shine" cx="35%" cy="25%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <radialGradient id="g-hades" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#6a5296"/><stop offset="1" stop-color="#160c26"/></radialGradient>
+ <radialGradient id="g-dionysus" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#5fb15f"/><stop offset="1" stop-color="#103a16"/></radialGradient>
+ <radialGradient id="g-hermes" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#6fd3ff"/><stop offset="1" stop-color="#0b4a75"/></radialGradient>
+ <radialGradient id="g-aphrodite" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#ffa6cb"/><stop offset="1" stop-color="#a3104b"/></radialGradient>
+ <radialGradient id="g-hera" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#3fc1b3"/><stop offset="1" stop-color="#073f3a"/></radialGradient>
+ <radialGradient id="g-crow" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#ffcf7a"/><stop offset="1" stop-color="#c4410c"/></radialGradient>
+ <radialGradient id="g-zeus" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#6879e0"/><stop offset="1" stop-color="#10153f"/></radialGradient>
+ <radialGradient id="g-ares" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#ff6659"/><stop offset="1" stop-color="#4f0707"/></radialGradient>
+ <pattern id="meander" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 36 H36 V4 H8 V28 H28 V12 H16 V20" fill="none" stroke="#6b4d12" stroke-width="3.2"/></pattern>
+</defs></svg>
+
+<header>
+  <svg viewBox="0 0 60 100" aria-hidden="true" id="laurelL"></svg>
+  <h1>Race Round Olympus</h1>
+  <svg viewBox="0 0 60 100" aria-hidden="true" id="laurelR" style="transform:scaleX(-1)"></svg>
+</header>
+<div class="sub">Gods, Cupid, crows and Hell. Go round the board three times to win!</div>
+
+<section id="setup">
+  <div class="card">
+    <h2>Choose your gods</h2>
+    <div class="sub">Tap a medallion to add it (2 to 8 players). Play order follows the order you pick. Each god can be played by a person or the computer.</div>
+    <div class="pickgrid" id="pickgrid"></div>
+    <div class="setupbar">
+      <button id="startBtn" disabled>Begin the race</button>
+      <button class="ghost" id="rulesBtn1">Read the rules</button>
+      <button class="ghost sndBtn">🔊 Sound on</button>
+    </div>
+  </div>
+</section>
+
+<section id="game" class="hidden">
+  <div>
+    <div class="frame" id="frame">
+      <svg class="key" aria-hidden="true"><rect x="0" y="0" width="100%" height="100%" fill="url(#meander)" opacity=".55"/></svg>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+  <div class="side">
+    <div class="card"><h2>Players</h2><div id="plist"></div></div>
+    <div class="card"><h2>Chronicle</h2><ul id="log"></ul></div>
+    <div class="btnrow">
+      <button class="ghost" id="rulesBtn2">Rules</button>
+      <button class="ghost sndBtn">🔊 Sound on</button>
+      <button class="ghost" id="musicBtn">🎵 Music off</button>
+      <button class="ghost" id="speedBtn">Speed: normal</button>
+      <button class="ghost" id="newBtn">New game</button>
+    </div>
+  </div>
+</section>
+
+<div class="flash" id="flash"></div>
+<div class="modal hidden" id="modal"><div class="mbox" id="mbox"></div></div>
+
+<script>
+(()=>{
+/* ================= ART ================= */
+const ICON={
+ hades:`<path d="M50 16c-18 0-30 13-30 30 0 9 4 16 10 20v13h40V66c6-4 10-11 10-20 0-17-12-30-30-30z" fill="#f3ead8" stroke="#2a1d10" stroke-width="2"/><ellipse cx="39" cy="47" rx="7.5" ry="8.5" fill="#1b1020"/><ellipse cx="61" cy="47" rx="7.5" ry="8.5" fill="#1b1020"/><circle cx="39" cy="47" r="2.2" fill="#ff5a36"/><circle cx="61" cy="47" r="2.2" fill="#ff5a36"/><path d="M50 56l-4.5 8h9z" fill="#1b1020"/><path d="M40 79v-8M47 79v-8M53 79v-8M60 79v-8" stroke="#2a1d10" stroke-width="2.5"/>`,
+ dionysus:`<path d="M50 22V12" stroke="#6d4c2f" stroke-width="5" stroke-linecap="round"/><path d="M52 18c8-10 24-10 30-2-8 8-22 9-30 2z" fill="#8bd16a" stroke="#2f6b1f" stroke-width="2"/>${[[33,32],[50,32],[67,32],[41.5,47],[58.5,47],[33,47],[67,47],[50,62],[41.5,62],[58.5,62],[50,77]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9.5" fill="#9c6ade" stroke="#3d1466" stroke-width="2"/><circle cx="${x-3}" cy="${y-3}" r="2.5" fill="#fff" opacity=".6"/>`).join('')}`,
+ hermes:`<path d="M30 82 C28 70 34 62 46 60 L60 58 C70 57 78 62 80 70 L82 80 C70 84 46 86 30 82z" fill="#ffd54f" stroke="#7a5200" stroke-width="2.5"/><path d="M40 62 L44 44 M52 59 L54 42 M64 58 L62 42" stroke="#7a5200" stroke-width="3" stroke-linecap="round"/><path d="M42 60 C30 44 14 40 6 44 C16 46 22 50 24 54 C14 52 8 56 6 60 C18 58 28 60 34 64 C24 64 18 68 16 72 C28 68 36 68 42 68z" fill="#fff" stroke="#9fb8c8" stroke-width="1.5"/><path d="M26 84 H84" stroke="#7a5200" stroke-width="3" stroke-linecap="round"/>`,
+ aphrodite:`<path d="M12 84 L84 16" stroke="#ffd54f" stroke-width="4" stroke-linecap="round"/><path d="M50 82 C20 60 12 42 22 30 C32 18 46 24 50 34 C54 24 68 18 78 30 C88 42 80 60 50 82z" fill="#ff4f86" stroke="#7d0a35" stroke-width="3"/><path d="M30 34 C34 28 40 28 44 32" stroke="#fff" stroke-width="3" fill="none" opacity=".7" stroke-linecap="round"/><path d="M84 16 L90 8 L92 22 L78 24z" fill="#ffd54f" stroke="#7a5200" stroke-width="1.5"/><path d="M12 84 L6 80 M12 84 L10 92 M17 79 L10 75 M17 79 L15 87" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`,
+ hera:`<path d="M50 94 Q47 62 50 16" stroke="#e8d08f" stroke-width="3" fill="none"/>${Array.from({length:9},(_,i)=>`<path d="M50 ${30+i*6} L${22+i} ${18+i*7}" stroke="#9ccc65" stroke-width="1.6"/><path d="M50 ${30+i*6} L${78-i} ${18+i*7}" stroke="#9ccc65" stroke-width="1.6"/>`).join('')}<ellipse cx="50" cy="38" rx="19" ry="23" fill="#7cb342" stroke="#33691e" stroke-width="2"/><ellipse cx="50" cy="39" rx="13" ry="16" fill="#ffca28"/><ellipse cx="50" cy="40" rx="9" ry="11" fill="#1e88e5"/><ellipse cx="50" cy="41" rx="4.5" ry="6" fill="#0b1640"/>`,
+ crow:`<path d="M10 66 C22 46 42 38 58 40 L68 30 C74 26 82 28 85 33 L96 35 L86 40 C84 48 78 54 70 56 C64 68 52 74 38 74 L20 88 L26 74 L8 78z" fill="#141018"/><path d="M34 54 C46 46 58 48 66 56" stroke="#4a4458" stroke-width="3" fill="none"/><circle cx="77" cy="34" r="3" fill="#fff"/><circle cx="77.5" cy="34" r="1.4" fill="#000"/><path d="M48 74 L44 86 M56 72 L56 86" stroke="#141018" stroke-width="3"/>`,
+ zeus:`<path d="M58 6 L24 54 L45 54 L34 94 L78 38 L56 38 L68 6z" fill="#ffe14f" stroke="#c77700" stroke-width="3" stroke-linejoin="round"/><path d="M58 12 L34 48" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/>`,
+ ares:`<path d="M16 92 L84 16" stroke="#7b5a43" stroke-width="5" stroke-linecap="round"/><path d="M84 16 L94 4 L90 20 L78 26z" fill="#cfd8dc" stroke="#455a64" stroke-width="1.5"/><circle cx="44" cy="58" r="28" fill="#d39446" stroke="#6b3d0c" stroke-width="4"/><circle cx="44" cy="58" r="19" fill="#e9b468" stroke="#8a5216" stroke-width="2"/><path d="M34 71 L44 45 L54 71" stroke="#8a0e0e" stroke-width="5.5" fill="none" stroke-linejoin="round"/>`
+};
+const GODS=[
+ {id:'hades',name:'Hades',word:'Death'},
+ {id:'dionysus',name:'Dionysus',word:'Wine'},
+ {id:'hermes',name:'Hermes',word:'Speed'},
+ {id:'aphrodite',name:'Aphrodite',word:'Love'},
+ {id:'hera',name:'Hera',word:'Marriage'},
+ {id:'crow',name:'Crow',word:'Karma'},
+ {id:'zeus',name:'Zeus',word:'Thunder'},
+ {id:'ares',name:'Ares',word:'War'}
+];
+function medal(id){return `<svg class="medal" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="49" fill="url(#gold)"/><circle cx="50" cy="50" r="49" fill="none" stroke="#5a3a00" stroke-width="1.5"/><circle cx="50" cy="50" r="41" fill="url(#g-${id})" stroke="#5a3a00" stroke-width="2"/>${Array.from({length:24},(_,i)=>`<circle cx="${50+45*Math.cos(i*Math.PI/12)}" cy="${50+45*Math.sin(i*Math.PI/12)}" r="1.4" fill="#7a5200"/>`).join('')}<g transform="translate(50 50) scale(.62) translate(-50 -50)">${ICON[id]}</g><circle cx="50" cy="50" r="41" fill="url(#shine)"/></svg>`;}
+const ART={
+ start:`<path d="M10 50 H70" stroke="#2e6b1f" stroke-width="11" stroke-linecap="round"/><path d="M56 28 L82 50 L56 72" stroke="#2e6b1f" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+ crow:ICON.crow,
+ cupid:ICON.aphrodite,
+ gotohell:`<g class="flick"><path d="M18 96 C8 86 12 74 18 68 C20 76 24 78 26 76 C24 68 28 60 34 54 C34 64 40 68 40 78 C40 90 30 98 18 96z" fill="#ffab00"/><path d="M82 96 C92 86 88 74 82 68 C80 76 76 78 74 76 C76 68 72 60 66 54 C66 64 60 68 60 78 C60 90 70 98 82 96z" fill="#ffab00"/></g><path d="M14 8 h72 a10 10 0 0 1 10 10 v26 a10 10 0 0 1 -10 10 h-40 l-16 13 v-13 h-16 a10 10 0 0 1 -10 -10 v-26 a10 10 0 0 1 10 -10z" fill="#fff8e7" stroke="#2a0000" stroke-width="3"/><text x="50" y="28" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="15" fill="#b71c1c">GO TO</text><text x="50" y="46" text-anchor="middle" font-family="Georgia,serif" font-weight="700" font-size="17" fill="#b71c1c">HELL!</text>`,
+ heph:`<path d="M10 42 H76 C76 52 66 56 60 56 V66 H72 V78 H28 V66 H40 V56 C28 56 18 50 10 42z" fill="#455a64" stroke="#1c2a31" stroke-width="2.5"/><path d="M14 44 H72" stroke="#90a4ae" stroke-width="2"/><g transform="rotate(-35 70 30)"><rect x="67" y="22" width="7" height="40" rx="2" fill="#8d6e63" stroke="#4e342e" stroke-width="1.5"/><rect x="56" y="12" width="30" height="13" rx="2" fill="#b0bec5" stroke="#37474f" stroke-width="2"/></g><g fill="#ff9100"><circle cx="44" cy="32" r="2.5"/><circle cx="36" cy="26" r="2"/><circle cx="52" cy="24" r="1.8"/><circle cx="30" cy="34" r="1.6"/></g>`,
+ hell:`<g class="flick"><path d="M50 96 C20 96 12 72 22 52 C26 64 33 66 35 61 C28 44 38 22 52 8 C50 28 64 34 66 48 C68 41 73 38 75 33 C88 52 86 96 50 96z" fill="#ff6d00" stroke="#7a1a00" stroke-width="2"/><path d="M50 96 C36 96 31 84 36 72 C40 78 45 78 45 73 C43 64 50 52 57 45 C57 57 66 64 66 76 C66 88 60 96 50 96z" fill="#ffd54f"/></g>`,
+ makemiss:`<path d="M26 12 H74 M26 88 H74" stroke="#5d4037" stroke-width="7" stroke-linecap="round"/><path d="M31 16 C31 40 47 44 47 50 C47 56 31 60 31 84 H69 C69 60 53 56 53 50 C53 44 69 40 69 16z" fill="#e3f2fd" stroke="#5d4037" stroke-width="3"/><path d="M36 80 Q50 62 64 80 Z" fill="#ffb300"/><path d="M38 26 H62 Q50 42 38 26z" fill="#ffb300"/><path d="M50 50 V70" stroke="#ffb300" stroke-width="2" stroke-dasharray="2 3"/>`,
+ apollo:`<g class="spin">${Array.from({length:12},(_,i)=>`<path d="M50 50 L${50+46*Math.cos(i*Math.PI/6-0.12)} ${50+46*Math.sin(i*Math.PI/6-0.12)} L${50+46*Math.cos(i*Math.PI/6+0.12)} ${50+46*Math.sin(i*Math.PI/6+0.12)}z" fill="#ff8f00"/>`).join('')}</g><circle cx="50" cy="50" r="24" fill="#ffd600" stroke="#e65100" stroke-width="3"/><path d="M38 46 q4 -4 8 0 M54 46 q4 -4 8 0" stroke="#5d2e00" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M40 58 q10 8 20 0" stroke="#5d2e00" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+ backstart:`<path d="M76 34 A30 30 0 1 0 80 62" stroke="#6d4c2f" stroke-width="10" fill="none" stroke-linecap="round"/><path d="M60 22 L88 28 L72 50z" fill="#6d4c2f"/>`,
+ amphora:`<path d="M40 10 H60 V18 C60 22 72 26 72 44 C72 66 62 80 56 86 H44 C38 80 28 66 28 44 C28 26 40 22 40 18z" fill="#8d4a22"/><path d="M40 22 C26 22 24 36 32 40 M60 22 C74 22 76 36 68 40" stroke="#8d4a22" stroke-width="4" fill="none"/><path d="M30 46 H70 M32 58 H68" stroke="#1a0d05" stroke-width="3"/>`,
+ column:`<rect x="24" y="10" width="52" height="10" fill="#7d6a4f"/><rect x="30" y="80" width="40" height="10" fill="#7d6a4f"/><rect x="34" y="20" width="32" height="60" fill="#9c8866"/><path d="M42 20 V80 M50 20 V80 M58 20 V80" stroke="#6d5a3f" stroke-width="2"/>`,
+ lyre:`<path d="M30 86 H70 M34 86 C20 60 18 30 30 14 M66 86 C80 60 82 30 70 14 M26 26 H74" stroke="#7a5a20" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M40 26 V86 M47 26 V86 M53 26 V86 M60 26 V86" stroke="#7a5a20" stroke-width="1.6"/>`,
+ olive:`<path d="M20 86 C40 64 56 40 80 14" stroke="#5d6b2f" stroke-width="3.5" fill="none"/>${[[34,66,-40],[44,54,30],[52,44,-40],[62,32,30],[70,24,-40]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="11" ry="4.5" transform="rotate(${r} ${x} ${y})" fill="#7f9a3c"/>`).join('')}<circle cx="40" cy="70" r="4" fill="#3b3a5a"/><circle cx="60" cy="46" r="4" fill="#3b3a5a"/>`
+};
+const HAT=`<svg class="hat" viewBox="0 0 100 80" aria-hidden="true"><ellipse cx="50" cy="66" rx="46" ry="11" fill="#141414"/><path d="M24 66 V14 C24 8 76 8 76 14 V66z" fill="#1e1e1e" stroke="#000" stroke-width="2"/><rect x="24" y="48" width="52" height="10" fill="#c62828"/><path d="M30 16 V60" stroke="#ffffff22" stroke-width="5"/></svg>`;
+const HEART=`<svg class="heart" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 88 C16 62 6 42 18 26 C30 12 46 20 50 32 C54 20 70 12 82 26 C94 42 84 62 50 88z" fill="#ff2e6e" stroke="#fff" stroke-width="6"/></svg>`;
+const STAR=on=>`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7L12 17.3 5.8 20.9l1.6-7L2 9.2l7.1-.6z" fill="${on?'url(#gold)':'none'}" stroke="${on?'#8a5a00':'#7d73a8'}" stroke-width="1.5"/></svg>`;
+const TEMPLE=`<svg class="temple" viewBox="0 0 200 150" aria-hidden="true"><path d="M10 50 L100 8 L190 50z" fill="#f3e6c4"/><rect x="14" y="50" width="172" height="10" fill="#f3e6c4"/>${[24,56,88,120,152].map(x=>`<rect x="${x}" y="60" width="16" height="70" fill="#f3e6c4"/><rect x="${x-3}" y="60" width="22" height="5" fill="#fff"/>`).join('')}<rect x="6" y="130" width="188" height="8" fill="#f3e6c4"/><rect x="0" y="138" width="200" height="12" fill="#f3e6c4"/></svg>`;
+const laurel=()=>`<path d="M48 96 C20 80 10 50 24 6" stroke="#f2c14e" stroke-width="3" fill="none"/>${Array.from({length:7},(_,i)=>{const t=i/7,y=90-t*80,x=40-Math.sin(t*2.6)*18;return `<ellipse cx="${x-7}" cy="${y-2}" rx="9" ry="4" transform="rotate(-35 ${x-7} ${y-2})" fill="#f2c14e"/><ellipse cx="${x+7}" cy="${y-4}" rx="9" ry="4" transform="rotate(35 ${x+7} ${y-4})" fill="#e0a92e"/>`}).join('')}`;
+document.getElementById('laurelL').innerHTML=laurel();document.getElementById('laurelR').innerHTML=laurel();
+
+/* ================= SOUND ================= */
+let AC=null,master=null,soundOn=true,musicOn=false,musicTimer=null;
+function ac(){ if(!AC){const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; AC=new C(); master=AC.createGain(); master.gain.value=.55; const comp=AC.createDynamicsCompressor(); master.connect(comp); comp.connect(AC.destination);} if(AC.state==='suspended') AC.resume(); return AC;}
+function tone(f,d,o={}){const a=ac(); if(!a||!soundOn&&!o.music) return; const t=a.currentTime+(o.at||0); const os=a.createOscillator(), g=a.createGain(); os.type=o.type||'sine'; os.frequency.setValueAtTime(f,t); if(o.to) os.frequency.exponentialRampToValueAtTime(o.to,t+d); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(o.vol||.25,t+(o.atk||.006)); g.gain.exponentialRampToValueAtTime(0.0001,t+d); let node=os; if(o.lp){const f2=a.createBiquadFilter();f2.type='lowpass';f2.frequency.value=o.lp;os.connect(f2);node=f2;} node.connect(g); g.connect(master); os.start(t); os.stop(t+d+.05);}
+let NB=null;
+function noise(d,o={}){const a=ac(); if(!a||!soundOn) return; if(!NB){NB=a.createBuffer(1,a.sampleRate*2,a.sampleRate);const c=NB.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=Math.random()*2-1;} const t=a.currentTime+(o.at||0); const s=a.createBufferSource(); s.buffer=NB; const f=a.createBiquadFilter(); f.type=o.ft||'lowpass'; f.frequency.setValueAtTime(o.f||1000,t); if(o.fto) f.frequency.exponentialRampToValueAtTime(o.fto,t+d); f.Q.value=o.q||1; const g=a.createGain(); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(o.vol||.3,t+(o.atk||.005)); g.gain.exponentialRampToValueAtTime(0.0001,t+d); s.connect(f); f.connect(g); g.connect(master); s.start(t,Math.random()); s.stop(t+d+.05);}
+const pluck=(f,at=0,v=.22,music=false)=>{tone(f,1.1,{type:'triangle',vol:v,at,music});tone(f*2,.5,{vol:v*.35,at,music});tone(f*3.01,.25,{vol:v*.12,at,music});};
+const SCALE=[293.66,329.63,349.23,392,440,493.88,523.25,587.33,659.25,698.46,783.99,880];
+const SFX={
+ click(){tone(900,.06,{type:'triangle',vol:.12});},
+ dice(){for(let i=0;i<9;i++){noise(.05,{ft:'bandpass',f:1800+Math.random()*1800,q:3,vol:.35,at:i*.07+Math.random()*.02});tone(200+Math.random()*120,.04,{type:'square',vol:.04,at:i*.07,lp:900});}},
+ diceLand(){noise(.12,{ft:'bandpass',f:900,q:2,vol:.4});tone(140,.15,{vol:.25,to:80});},
+ step(i){pluck(SCALE[i%SCALE.length],0,.2);},
+ stepBack(i){pluck(SCALE[Math.max(0,5-i)]/2,0,.2);},
+ bump(){tone(160,.3,{vol:.45,to:55});noise(.18,{f:500,vol:.35});},
+ thunder(){noise(.12,{ft:'highpass',f:2500,vol:.6});noise(.25,{f:3000,fto:300,vol:.5,at:.03});noise(2.4,{f:220,fto:60,vol:.75,atk:.08,at:.08});tone(55,1.8,{type:'sawtooth',vol:.12,lp:160,to:38,at:.1});},
+ hell(){tone(110,1.6,{type:'sawtooth',vol:.18,lp:500,to:40});tone(116,1.6,{type:'sawtooth',vol:.14,lp:400,to:42});tone(55,2,{vol:.35,to:35});for(let i=0;i<14;i++)noise(.06,{ft:'bandpass',f:1500+Math.random()*2500,q:4,vol:.18,at:.1+Math.random()*1.4});noise(1.6,{f:600,fto:150,vol:.25,atk:.2});},
+ growl(){tone(70,.7,{type:'sawtooth',vol:.15,lp:300,to:50});for(let i=0;i<5;i++)noise(.05,{ft:'bandpass',f:2000+Math.random()*2000,q:4,vol:.12,at:Math.random()*.5});},
+ escape(){tone(220,.6,{type:'triangle',vol:.25,to:1320});[0,4,7,11].forEach((k,i)=>pluck(SCALE[k],.35+i*.08,.2));},
+ cupid(){[0,2,4,6,7,9,11].forEach((k,i)=>pluck(SCALE[k],i*.06,.17));[1568,2093,2637].forEach((f,i)=>tone(f,.6,{vol:.08,at:.45+i*.08}));},
+ caw(){[0,.26].forEach(at=>{const a=ac();if(!a||!soundOn)return;const t=a.currentTime+at;const o=a.createOscillator(),f=a.createBiquadFilter(),g=a.createGain();o.type='sawtooth';o.frequency.setValueAtTime(820,t);o.frequency.exponentialRampToValueAtTime(480,t+.2);f.type='bandpass';f.frequency.value=1300;f.Q.value=4;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.6,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(f);f.connect(g);g.connect(master);o.start(t);o.stop(t+.25);noise(.2,{ft:'bandpass',f:1600,q:3,vol:.12,at});});},
+ anvil(){[523,1394,2305,3120,4180].forEach((f,i)=>tone(f,1.3-i*.18,{vol:.18/(i+1)+.03}));noise(.04,{ft:'highpass',f:3000,vol:.4});},
+ sun(){[1046.5,1318.5,1568,2093].forEach((f,i)=>tone(f,1.6,{vol:.1,at:i*.09}));tone(523.25,1.8,{type:'triangle',vol:.12});},
+ miss(){tone(440,.25,{type:'triangle',vol:.22});tone(330,.45,{type:'triangle',vol:.22,at:.22});tone(247,.6,{type:'triangle',vol:.2,at:.44});},
+ whoosh(){noise(.6,{ft:'bandpass',f:2400,fto:250,q:1.4,vol:.45,atk:.1});},
+ swap(){noise(.35,{ft:'bandpass',f:400,fto:2400,q:1.5,vol:.35,atk:.08});noise(.35,{ft:'bandpass',f:2400,fto:400,q:1.5,vol:.35,atk:.08,at:.3});},
+ lap(){[[0,0],[4,.12],[7,.24]].forEach(([k,t])=>{tone(SCALE[k]*2,.35,{type:'square',vol:.07,lp:2500,at:t});pluck(SCALE[k]*2,t,.18);});tone(SCALE[0]*4,.8,{type:'square',vol:.07,lp:3000,at:.36});},
+ choose(){tone(196,2,{vol:.2});tone(392,1.5,{vol:.1});tone(588,1.2,{vol:.05});},
+ win(){const seq=[0,2,4,7,4,7,9,11];seq.forEach((k,i)=>{pluck(SCALE[k],i*.13,.2);tone(SCALE[k]*2,.2,{type:'square',vol:.05,lp:2500,at:i*.13});});[0,4,7,11].forEach(k=>tone(SCALE[k],2.4,{type:'triangle',vol:.12,at:1.1}));thunderSoft();},
+ forward(){[4,7,9].forEach((k,i)=>pluck(SCALE[k],i*.07,.18));}
+};
+function thunderSoft(){noise(2,{f:180,fto:60,vol:.35,atk:.2,at:1.1});}
+function setSound(v){soundOn=v;document.querySelectorAll('.sndBtn').forEach(b=>b.textContent=v?'🔊 Sound on':'🔇 Sound off');if(v){ac();SFX.click();}}
+document.querySelectorAll('.sndBtn').forEach(b=>b.addEventListener('click',()=>setSound(!soundOn)));
+function musicLoop(){const a=ac(); if(!a) return; const prog=[[0,4,7],[3,7,9],[4,7,11],[1,4,8]]; let bar=0; const beat=.42;
+ const play=()=>{ if(!musicOn) return; const ch=prog[bar%4]; pluck(SCALE[ch[0]]/2,0,.09,true); const pat=[0,1,2,1,2,1,0,2]; pat.forEach((p,i)=>{ if(Math.random()<.85) pluck(SCALE[ch[p]],i*beat/2,.05,true);}); bar++; };
+ play(); musicTimer=setInterval(play,beat*4*1000);}
+document.getElementById('musicBtn').addEventListener('click',()=>{musicOn=!musicOn;document.getElementById('musicBtn').textContent=musicOn?'🎵 Music on':'🎵 Music off';if(musicOn)musicLoop();else clearInterval(musicTimer);});
+
+/* ================= BOARD ================= */
+const SQ=[
+ {n:'Start',d:'Go!',c:0,r:5,t:'start',art:'start'},
+ {n:'Crowed!',d:'Crow may swap places with you',c:1,r:5,t:'crow',art:'crow'},
+ {n:'Cupid!',d:'Fly to Aphrodite & team up',c:2,r:5,t:'cupid',art:'cupid'},
+ {n:'Olive grove',d:'',c:2,r:4,art:'olive',plain:1},
+ {n:'Hades says',d:'',c:2,r:3,t:'gotohell',art:'gotohell'},
+ {n:'Hephaestus',d:'Cupid team? You are FREE!',c:2,r:2,t:'heph',art:'heph'},
+ {n:'Temple steps',d:'',c:2,r:1,art:'column',plain:1},
+ {n:'Hell',d:'Just visiting? Wear the hat!',c:2,r:0,t:'hell',art:'hell'},
+ {n:'Mount Olympus',d:'',c:1,r:0,art:'lyre',plain:1},
+ {n:'Make someone',d:'else miss a turn',c:0,r:0,t:'makemiss',art:'makemiss'},
+ {n:"Apollo's Sun",d:'Blinded! Miss a turn',c:0,r:1,t:'apollo',art:'apollo'},
+ {n:'Agora',d:'',c:0,r:2,art:'amphora',plain:1},
+ {n:'Olive grove',d:'',c:0,r:3,art:'olive',plain:1},
+ {n:'Go back',d:'to the Start',c:0,r:4,t:'backstart',art:'backstart'}
+];
+const N=SQ.length, LAPS=3, HELL=7;
+const $=id=>document.getElementById(id);
+function buildBoard(){
+ const g=$('grid'); g.innerHTML='';
+ SQ.forEach((s,i)=>{const d=document.createElement('div');d.className='cell'+(s.t?' c-'+s.t:'')+(s.plain?' plain':'');d.style.gridColumn=s.c+1;d.style.gridRow=s.r+1;
+  d.innerHTML=`<div class="ic"><svg viewBox="0 0 100 100" aria-hidden="true">${ART[s.art]}</svg></div><div class="lbl">${s.plain?'':s.n}</div><div class="ds">${s.d}</div>`;s.el=d;g.appendChild(d);});
+ const c=document.createElement('div');c.className='centre';
+ c.innerHTML=`${TEMPLE}<div id="turnMedal" class="turnmedal"></div><div class="turnlbl" id="turnLbl"></div><div class="die" id="die"></div><button id="rollBtn">Roll the dice</button><div class="hint" id="hint"></div>`;
+ g.appendChild(c);
+ $('rollBtn').addEventListener('click',()=>{ if(waitingHuman) humanRoll(); });
+ showDie(6);
+}
+const cellCentre=s=>[(s.c+.5)/3*100,(s.r+.5)/6*100];
+
+/* ================= GAME ================= */
+let picks=[], P=[], cur=0, busy=false, over=false, speed=1, waitingHuman=false;
+function drawPicks(){
+  const grid=$('pickgrid'); grid.innerHTML='';
+  GODS.forEach(g=>{
+    const k=picks.findIndex(p=>p.g===g);
+    const d=document.createElement('div'); d.className='pick'+(k>=0?' on':'');
+    d.innerHTML=(k>=0?`<div class="order">${k+1}</div>`:'')+`<div class="medal">${medal(g.id)}</div><div class="nm">${g.name}</div><div class="wd">${g.word}</div>`;
+    const toggle=()=>{ac(); if(k>=0) picks.splice(k,1); else picks.push({g,cpu:picks.length>0}); SFX.step(picks.length*2); drawPicks();};
+    d.querySelector('.medal').addEventListener('click',toggle);
+    const row=document.createElement('div'); row.className='row';
+    if(k>=0){[['Person',false],['Computer',true]].forEach(([l,v])=>{const b=document.createElement('button');b.className='seg'+(picks[k].cpu===v?' sel':'');b.textContent=l;b.addEventListener('click',()=>{picks[k].cpu=v;SFX.click();drawPicks();});row.appendChild(b);});}
+    else {const b=document.createElement('button');b.className='seg';b.textContent='Add to game';b.addEventListener('click',toggle);row.appendChild(b);}
+    d.appendChild(row); grid.appendChild(d);
+  });
+  $('startBtn').disabled=picks.length<2;
+}
+$('startBtn').addEventListener('click',()=>{ac();startGame();});
+$('rulesBtn1').addEventListener('click',showRules);
+$('rulesBtn2').addEventListener('click',showRules);
+$('newBtn').addEventListener('click',()=>{over=true;P=[];closeModal();$('game').classList.add('hidden');$('setup').classList.remove('hidden');busy=false;});
+$('speedBtn').addEventListener('click',()=>{speed=speed===1?0.45:speed===0.45?1.8:1;$('speedBtn').textContent='Speed: '+(speed===1?'normal':speed<1?'fast':'slow');});
+document.addEventListener('keydown',e=>{ if((e.code==='Space'||e.code==='Enter') && waitingHuman && $('modal').classList.contains('hidden') && !$('game').classList.contains('hidden') && e.target.tagName!=='BUTTON'){e.preventDefault();humanRoll();}});
+
+function startGame(){
+  over=false; busy=false; waitingHuman=false;
+  buildBoard();
+  P=picks.map(p=>({...p.g,god:p.g.id,cpu:p.cpu,pos:0,laps:0,inHell:false,skip:0,bound:false,el:null}));
+  P.forEach(p=>{const t=document.createElement('div');t.className='token';$('grid').appendChild(t);p.el=t;});
+  $('log').innerHTML=''; cur=0;
+  $('setup').classList.add('hidden'); $('game').classList.remove('hidden');
+  log('The race round Olympus begins! Go round the board three times to win.');
+  SFX.lap();
+  render(); startTurn();
+}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms*speed));
+const byGod=id=>P.find(p=>p.god===id);
+const prog=p=>p.laps*N+p.pos;
+const nm=p=>`<b>${p.name}</b>`;
+function log(msg){const li=document.createElement('li');li.innerHTML=msg;$('log').prepend(li);while($('log').children.length>80)$('log').lastChild.remove();}
+function layout(n){
+  if(n===1)return[[0,2.5]];
+  if(n===2)return[[-6,2.5],[6,2.5]];
+  if(n===3)return[[-10.5,2.5],[0,2.5],[10.5,2.5]];
+  if(n===4)return[[-6,-1],[6,-1],[-6,5.5],[6,5.5]];
+  const out=[];const rows=Math.ceil(n/3);for(let i=0;i<n;i++){const c=i%3,r=Math.floor(i/3);out.push([(c-1)*10.5,2.5+(r-(rows-1)/2)*(rows>2?4.2:6.5)]);}return out;
+}
+function render(){
+  if(!P.length) return;
+  const groups={};
+  P.forEach(p=>{(groups[p.pos]=groups[p.pos]||[]).push(p);});
+  Object.entries(groups).forEach(([pos,list])=>{
+    const [cx,cy]=cellCentre(SQ[pos]), L=layout(list.length);
+    list.forEach((p,i)=>{
+      p.el.style.left=(cx+L[i][0])+'%'; p.el.style.top=(cy+L[i][1])+'%';
+      p.el.classList.toggle('cur',p===P[cur]&&!over);
+      p.el.classList.toggle('trapped',p.inHell);
+      const key=`${p.pos===HELL}|${p.bound}`;
+      if(p.el.dataset.k!==key){p.el.dataset.k=key;p.el.innerHTML=medal(p.god)+(p.pos===HELL?HAT:'')+(p.bound?HEART:'');}
+    });
+  });
+  SQ.forEach(s=>s.el.classList.remove('here'));
+  const c=P[cur];
+  if(!over) SQ[c.pos].el.classList.add('here');
+  $('turnMedal').innerHTML=medal(c.god); $('turnLbl').textContent=over?'':`${c.name}'s turn`+(c.cpu?' (computer)':'');
+  const pl=$('plist'); pl.innerHTML='';
+  P.forEach((p,i)=>{
+    const r=document.createElement('div'); r.className='prow'+(i===cur&&!over?' cur':'');
+    let b='';
+    if(p.inHell) b+='<span class="badge fire">In Hell</span>';
+    if(p.skip) b+=`<span class="badge">misses ${p.skip}</span>`;
+    if(p.bound) b+='<span class="badge love">with Aphrodite</span>';
+    const sq=SQ[p.pos]; const where=sq.plain?sq.n:(sq.t==='gotohell'?'Hades says GO TO HELL':sq.t==='makemiss'?'Make someone miss a turn':sq.t==='backstart'?'Go back to the start':sq.n);
+    r.innerHTML=`${medal(p.god)}<div><div class="n">${p.name}${p.cpu?' <span class="badge">CPU</span>':''}${b}</div><div class="s">On ${where}</div></div><div class="laps" title="Laps completed">${[0,1,2].map(k=>STAR(k<p.laps)).join('')}</div>`;
+    pl.appendChild(r);
+  });
+}
+const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+function showDie(n){$('die').innerHTML=[...Array(9)].map((_,i)=>`<span class="${PIPS[n].includes(i)?'p':''}"></span>`).join('');}
+async function rollDie(){
+  const d=$('die'); d.classList.remove('land'); d.classList.add('rolling'); SFX.dice();
+  for(let i=0;i<9;i++){showDie(1+Math.floor(Math.random()*6));await sleep(70);}
+  const v=1+Math.floor(Math.random()*6); showDie(v); d.classList.remove('rolling'); void d.offsetWidth; d.classList.add('land'); SFX.diceLand(); return v;
+}
+function popup(p,text,color){const [x,y]=[parseFloat(p.el.style.left),parseFloat(p.el.style.top)];const e=document.createElement('div');e.className='pop';e.textContent=text;e.style.color=color||'#ffe082';e.style.left=x+'%';e.style.top=(y-4)+'%';$('grid').appendChild(e);setTimeout(()=>e.remove(),1500);}
+function flash(kind){const f=$('flash');f.className='flash';void f.offsetWidth;f.className='flash '+kind;}
+function shake(){const f=$('frame');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');}
+
+function stepOne(p,dir){
+  if(dir>0){p.pos++; if(p.pos>=N){p.pos=0;p.laps++; if(p.laps<LAPS){log(`${nm(p)} passes Start: lap ${p.laps} complete! ⭐`);SFX.lap();setTimeout(()=>popup(p,'Lap '+p.laps+'!','#ffd54f'),50);}}}
+  else {p.pos--; if(p.pos<0){ if(p.laps>0){p.laps--;p.pos=N-1;} else p.pos=0; }}
+}
+async function move(ps,n){
+  const dir=Math.sign(n);
+  for(let i=0;i<Math.abs(n);i++){ ps.forEach(p=>{stepOne(p,dir);p.el.classList.remove('hop');void p.el.offsetWidth;p.el.classList.add('hop');}); dir>0?SFX.step(i+ (ps[0].pos%4)):SFX.stepBack(i); render(); await sleep(250); }
+}
+function team(p){
+  const a=byGod('aphrodite'); if(!a) return [];
+  if(p===a) return P.filter(q=>q.bound&&!q.inHell);
+  if(p.bound) return [a,...P.filter(q=>q.bound&&q!==p)].filter(q=>!q.inHell);
+  return [];
+}
+const sameTeam=(a,b)=>team(a).includes(b);
+function sendToHell(p){
+  p.pos=HELL; p.inHell=true; SFX.hell(); flash('red'); shake();
+  if(p.bound){p.bound=false; log(`Cupid's arrow falls out: ${nm(p)} is no longer with Aphrodite.`);}
+  const a=byGod('aphrodite'); if(p===a && P.some(q=>q.bound)){P.forEach(q=>q.bound=false); log('Aphrodite is in Hell, so her Cupid team breaks up.');}
+  render(); popup(p,'To Hell!','#ff7043');
+}
+function checkWin(prefer){
+  const w=P.filter(p=>p.laps>=LAPS); if(!w.length) return false;
+  const winner=w.includes(prefer)?prefer:w[0]; over=true; waitingHuman=false; render();
+  log(`🏆 ${nm(winner)} has raced round Olympus three times and WINS!`); SFX.win(); flash('white');
+  const box=$('mbox'); box.innerHTML=`<div class="win">${medal(winner.god)}<h3>${winner.name} wins!</h3><p>Three times round Olympus. Glory to ${winner.name}!</p><div class="opts"><button id="againBtn">Play again with the same gods</button><button class="ghost" id="setupBtn">Choose different gods</button></div></div>`;
+  $('modal').classList.remove('hidden');
+  $('againBtn').addEventListener('click',()=>{closeModal();startGame();});
+  $('setupBtn').addEventListener('click',()=>{closeModal();P=[];$('game').classList.add('hidden');$('setup').classList.remove('hidden');});
+  const cols=['#ffd54f','#ff5d8f','#4fc3f7','#9ccc65','#fff','#b388ff'];
+  for(let i=0;i<80;i++){const c=document.createElement('div');c.className='confetti';c.style.background=cols[i%cols.length];c.style.borderRadius=i%2?'50%':'2px';c.style.left=Math.random()*100+'vw';c.style.animationDuration=(2+Math.random()*3)+'s';c.style.animationDelay=Math.random()*1.5+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),6500);}
+  return true;
+}
+function closeModal(){$('modal').classList.add('hidden');}
+function choose(decider,title,text,opts,cpuPick){
+  return new Promise(async res=>{
+    SFX.choose();
+    if(decider.cpu){ await sleep(1000); const v=cpuPick(); const o=opts.find(o=>o.v===v); log(`${nm(decider)} (CPU) chooses: ${o.l}`); res(v); return; }
+    const box=$('mbox');
+    box.innerHTML=`<div class="mhead">${medal(decider.god)}<h3>${title}</h3></div><p>${text}</p><div class="opts"></div>`;
+    const od=box.querySelector('.opts');
+    opts.forEach(o=>{const b=document.createElement('button');b.innerHTML=(o.god?medal(o.god):'')+o.l;b.addEventListener('click',()=>{closeModal();SFX.click();log(`${nm(decider)} chooses: ${o.l}`);res(o.v);});od.appendChild(b);});
+    $('modal').classList.remove('hidden');
+  });
+}
+function showRules(){
+  const ic=a=>`<svg viewBox="0 0 100 100" aria-hidden="true">${ART[a]}</svg>`;
+  const box=$('mbox'); box.innerHTML=`<div class="rules"><h3>The rules</h3><ul>
+   <li>${ic('start')}<span><b>To win</b> you must go around the board <b>3 times</b>.</span></li>
+   <li>${medal('ares')}<span>If you land on the same space as someone, <b>they move back 2</b>.</span></li>
+   <li>${medal('zeus')}<span>If you are not <b>Zeus</b> and Zeus lands on you, you <b>move forward 2</b>. But if you land on Zeus, <b>you move back 4</b>.</span></li>
+   <li>${medal('hades')}<span>If you land on <b>Hades</b>, Hades chooses whether you move forward 1 more or go to Hell.</span></li>
+   <li>${ic('hell')}<span>If you are <b>sent to Hell</b>, you can only escape on your turn by rolling a <b>6</b> (then roll again). If you just land on Hell you are <b>just visiting</b>. Wear the hat!</span></li>
+   <li>${ic('cupid')}<span><b>Cupid:</b> fly to Aphrodite's square. You are now a team: when one rolls forward, the other goes too. <b>Hephaestus</b> sets you free.</span></li>
+   <li>${ic('crow')}<span><b>Crowed!</b> The person playing Crow can swap places with you (but doesn't have to).</span></li>
+   <li>${ic('gotohell')}<span><b>Hades says GO TO HELL!</b> Off you go.</span></li>
+   <li>${ic('apollo')}<span><b>Apollo's blinding Sun:</b> miss a turn.</span></li>
+   <li>${ic('makemiss')}<span><b>Make someone else miss a turn:</b> you pick who.</span></li>
+   <li>${ic('backstart')}<span><b>Go back to the start</b> (laps already done still count).</span></li>
+  </ul></div>`;
+  const b=document.createElement('button'); b.textContent='Got it'; b.style.marginTop='10px'; b.addEventListener('click',()=>{SFX.click();closeModal();}); box.appendChild(b);
+  $('modal').classList.remove('hidden');
+}
+
+function startTurn(){
+  if(over||!P.length) return;
+  const p=P[cur]; render();
+  if(p.skip>0){ p.skip--; log(`${nm(p)} misses this turn.`); SFX.miss(); popup(p,'Miss a turn','#90caf9'); busy=true; const g=P; setTimeout(()=>{ if(g!==P) return; busy=false; next();},1000*speed); return; }
+  $('hint').textContent=p.inHell?'In Hell: roll a 6 to escape!':(p.cpu?'The computer is rolling…':'or press Space');
+  if(p.cpu){ waitingHuman=false; $('rollBtn').disabled=true; const g=P; setTimeout(()=>{ if(!over && g===P && P[cur]===p) doRoll(); },850*speed); }
+  else { waitingHuman=true; $('rollBtn').disabled=false; }
+}
+function humanRoll(){ if(busy||over) return; waitingHuman=false; $('rollBtn').disabled=true; doRoll(); }
+function next(){ if(over) return; cur=(cur+1)%P.length; startTurn(); }
+
+async function doRoll(){
+  if(busy||over) return; busy=true;
+  const p=P[cur]; const g=P;
+  const r=await rollDie(); if(over||g!==P) return;
+  log(`${nm(p)} rolls a <b>${r}</b>.`);
+  await sleep(250);
+  let again=false;
+  if(p.inHell){
+    if(r===6){ p.inHell=false; SFX.escape(); popup(p,'Escaped!','#a5d6a7'); log(`${nm(p)} escapes from Hell! Roll again.`); again=true; }
+    else { SFX.growl(); log(`${nm(p)} is stuck in Hell.`); }
+  } else {
+    const mates=team(p);
+    if(mates.length) log(`💘 ${mates.map(nm).join(' and ')} ${mates.length>1?'fly':'flies'} along with ${nm(p)}.`);
+    await move([p,...mates],r);
+    if(over||g!==P) return;
+    if(checkWin(p)) return;
+    await land(p);
+    if(over||g!==P) return;
+    if(checkWin(p)) return;
+  }
+  render(); busy=false;
+  if(again) startTurn(); else next();
+}
+
+async function land(p){
+  if(p.pos!==HELL){
+    const others=P.filter(q=>q!==p&&q.pos===p.pos&&!q.inHell&&!sameTeam(p,q));
+    if(others.length){
+      const zeus=others.find(q=>q.god==='zeus'), hades=others.find(q=>q.god==='hades');
+      if(p.god==='zeus'){
+        SFX.thunder(); flash('white'); shake();
+        for(const q of others){ log(`⚡ Zeus lands on ${nm(q)}: ${nm(q)} moves forward 2!`); popup(q,'+2','#fff59d'); await sleep(500); await move([q],2); }
+      } else if(zeus){
+        SFX.thunder(); flash('white'); shake(); popup(p,'−4','#ff8a80');
+        log(`⚡ ${nm(p)} landed on Zeus: move back 4!`); await sleep(600); await move([p],-4);
+        for(const q of others.filter(q=>q!==zeus)){ log(`${nm(q)} gets bumped back 2.`); SFX.bump(); popup(q,'−2','#ff8a80'); await move([q],-2); }
+      } else if(hades && p.god!=='hades'){
+        const ch=await choose(hades,'Hades decides…',`${p.name} landed on you. Do they move forward 1 more, or go to Hell?`,
+          [{l:'Move forward 1',v:'fwd'},{l:'Go to Hell!',v:'hell'}], ()=>Math.random()<0.75?'hell':'fwd');
+        if(over) return;
+        for(const q of others.filter(q=>q!==hades)){ log(`${nm(q)} gets bumped back 2.`); SFX.bump(); popup(q,'−2','#ff8a80'); await move([q],-2); }
+        if(ch==='hell'){ log(`🔥 ${nm(p)} is sent to Hell by Hades!`); sendToHell(p); return; }
+        SFX.forward(); popup(p,'+1','#a5d6a7'); await move([p],1);
+      } else {
+        for(const q of others){ log(`${nm(p)} lands on ${nm(q)}: ${nm(q)} moves back 2.`); SFX.bump(); shake(); popup(q,'−2','#ff8a80'); await sleep(300); await move([q],-2); }
+      }
+    }
+  }
+  if(over) return;
+  const s=SQ[p.pos];
+  switch(s.t){
+    case 'crow':{
+      SFX.caw();
+      const c=byGod('crow');
+      if(!c){log('Crowed! But no-one is playing Crow.');break;}
+      if(c===p){log('Crow lands on her own square. Caw!');break;}
+      if(c.inHell){log('Crowed! But Crow is stuck in Hell.');break;}
+      const ch=await choose(c,'Crowed!',`${p.name} landed on the Crow square. Swap places with them? (You don't have to.)`,
+        [{l:`Swap with ${p.name}`,v:'swap',god:p.god},{l:'Stay where I am',v:'stay'}], ()=>c.pos<p.pos?'swap':'stay');
+      if(over) return;
+      if(ch==='swap'){ const t=c.pos; c.pos=p.pos; p.pos=t; SFX.swap(); log(`Crow swaps places with ${nm(p)}!`); render(); popup(c,'Swap!','#ffcc80'); }
+      break;}
+    case 'cupid':{
+      const a=byGod('aphrodite');
+      if(!a){log("Cupid! But Aphrodite isn't playing.");break;}
+      if(a===p){SFX.cupid();log('Aphrodite visits Cupid.');break;}
+      if(a.inHell){log('Cupid! But Aphrodite is in Hell, so nothing happens.');break;}
+      SFX.cupid(); flash('pink'); await sleep(350); p.pos=a.pos; p.bound=true;
+      log(`💘 Cupid! ${nm(p)} flies to Aphrodite: they are now a team!`); render(); popup(p,'💘','#ff80ab');
+      break;}
+    case 'gotohell': log(`🔥 Hades says GO TO HELL! ${nm(p)} is sent to Hell.`); await sleep(200); sendToHell(p); break;
+    case 'heph':
+      SFX.anvil();
+      if(p.bound){p.bound=false; log(`🔨 Hephaestus sets ${nm(p)} FREE from Aphrodite!`); popup(p,'Free!','#b0bec5'); render();}
+      else log(`${nm(p)} visits Hephaestus's forge. Clang!`);
+      break;
+    case 'hell': SFX.growl(); log(`${nm(p)} is just visiting Hell. Wear the hat! 🎩`); break;
+    case 'makemiss':{
+      const opts=P.filter(q=>q!==p);
+      const ch=await choose(p,'Make someone miss a turn','Who should miss their next turn?',
+        opts.map(q=>({l:q.name,v:q.god,god:q.god})), ()=>opts.slice().sort((a,b)=>prog(b)-prog(a))[0].god);
+      if(over) return;
+      const t=byGod(ch); t.skip++; SFX.miss(); popup(t,'Zzz','#90caf9'); log(`${nm(t)} will miss a turn.`);
+      break;}
+    case 'apollo': p.skip++; SFX.sun(); flash('white'); popup(p,'Blinded!','#ffe082'); log(`☀️ Apollo's blinding Sun! ${nm(p)} misses a turn.`); break;
+    case 'backstart': SFX.whoosh(); log(`↩️ ${nm(p)} goes back to the Start.`); popup(p,'Back to Start','#ffcc80'); await sleep(350); p.pos=0; render(); break;
+    case 'start': SFX.forward(); break;
+  }
+}
+drawPicks();
+})();
+</script>
+</body>
+</html>
