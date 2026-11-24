@@ -135,6 +135,9 @@ button.ghost{background:#ffffff10;color:var(--ink);border:1px solid var(--line);
 .win svg.medal{width:150px;height:150px;animation:bob 1s ease-in-out infinite}
 .confetti{position:fixed;top:-20px;width:12px;height:12px;z-index:60;animation:fall linear forwards;pointer-events:none}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.credit{text-align:center;color:var(--muted);font-style:italic;font-size:14px;padding:6px 10px 18px;letter-spacing:.04em}
+.credit b{color:var(--gold);font-style:normal}
+.mbox .credit{padding:12px 0 0;font-size:13px}
 </style>
 </head>
 <body>
@@ -192,11 +195,13 @@ button.ghost{background:#ffffff10;color:var(--ink);border:1px solid var(--line);
   </div>
 </section>
 
+<footer class="credit">Created by <b>Eleanor Maclean</b></footer>
 <div class="flash" id="flash"></div>
 <div class="modal hidden" id="modal"><div class="mbox" id="mbox"></div></div>
 
 <script>
 (()=>{
+const CREDIT='<div class="credit">Created by <b>Eleanor Maclean</b></div>';
 /* ================= ART ================= */
 const ICON={
  hades:`<path d="M50 16c-18 0-30 13-30 30 0 9 4 16 10 20v13h40V66c6-4 10-11 10-20 0-17-12-30-30-30z" fill="#f3ead8" stroke="#2a1d10" stroke-width="2"/><ellipse cx="39" cy="47" rx="7.5" ry="8.5" fill="#1b1020"/><ellipse cx="61" cy="47" rx="7.5" ry="8.5" fill="#1b1020"/><circle cx="39" cy="47" r="2.2" fill="#ff5a36"/><circle cx="61" cy="47" r="2.2" fill="#ff5a36"/><path d="M50 56l-4.5 8h9z" fill="#1b1020"/><path d="M40 79v-8M47 79v-8M53 79v-8M60 79v-8" stroke="#2a1d10" stroke-width="2.5"/>`,
@@ -424,7 +429,7 @@ function checkWin(prefer){
   const w=P.filter(p=>p.laps>=LAPS); if(!w.length) return false;
   const winner=w.includes(prefer)?prefer:w[0]; over=true; waitingHuman=false; render();
   log(`🏆 ${nm(winner)} has raced round Olympus three times and WINS!`); SFX.win(); flash('white');
-  const box=$('mbox'); box.innerHTML=`<div class="win">${medal(winner.god)}<h3>${winner.name} wins!</h3><p>Three times round Olympus. Glory to ${winner.name}!</p><div class="opts"><button id="againBtn">Play again with the same gods</button><button class="ghost" id="setupBtn">Choose different gods</button></div></div>`;
+  const box=$('mbox'); box.innerHTML=`<div class="win">${medal(winner.god)}<h3>${winner.name} wins!</h3><p>Three times round Olympus. Glory to ${winner.name}!</p><div class="opts"><button id="againBtn">Play again with the same gods</button><button class="ghost" id="setupBtn">Choose different gods</button></div>${CREDIT}</div>`;
   $('modal').classList.remove('hidden');
   $('againBtn').addEventListener('click',()=>{closeModal();startGame();});
   $('setupBtn').addEventListener('click',()=>{closeModal();P=[];$('game').classList.add('hidden');$('setup').classList.remove('hidden');});
@@ -459,7 +464,7 @@ function showRules(){
    <li>${ic('makemiss')}<span><b>Make someone else miss a turn:</b> you pick who.</span></li>
    <li>${ic('backstart')}<span><b>Go back to the start</b> (laps already done still count).</span></li>
   </ul></div>`;
-  const b=document.createElement('button'); b.textContent='Got it'; b.style.marginTop='10px'; b.addEventListener('click',()=>{SFX.click();closeModal();}); box.appendChild(b);
+  const b=document.createElement('button'); b.textContent='Got it'; b.style.marginTop='10px'; b.addEventListener('click',()=>{SFX.click();closeModal();}); box.appendChild(b); box.insertAdjacentHTML('beforeend',CREDIT);
   $('modal').classList.remove('hidden');
 }
 
